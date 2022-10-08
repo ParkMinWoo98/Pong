@@ -1,6 +1,7 @@
 #pragma once
 #include "SpriteObj.h"
 #include <SFML/Graphics.hpp>
+#include "Animation.h"
 
 class Ball : public SpriteObj
 {
@@ -13,6 +14,7 @@ protected:
 	Vector2f currDir;
 	bool isMoving;
 
+	Animation* anim;
 public:
 	Ball();
 	virtual ~Ball();
@@ -23,6 +25,7 @@ public:
 	virtual void Draw(RenderWindow& window) override;
 	virtual void SetTexture(const Texture& texture);
 
+	void SetAnim(Animation* anim);
 	void SetSpeed(float speed);
 	void SetRotation();
 

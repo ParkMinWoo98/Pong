@@ -6,15 +6,23 @@
 #include "../GameObject/SpriteObj.h"
 #include "../GameObject/TextObject.h"
 #include "../Framework/SoundMgr.h"
-#include "../GameObject/Ball.h"
 
 SceneDev1::SceneDev1()
 	:Scene(Scenes::Dev1)
 {
+	Animation* ball1 = new Animation();
+	ball1->SetCycle(0.1f);
+	string ballname1[] = { "graphics/redball1.png", "graphics/redball2.png", "graphics/redball3.png", "graphics/redball4.png", "graphics/redball5.png" ,"graphics/redball6.png" };
+	for (auto& ballname : ballname1)
+	{
+		ball1->SetTexture(*RESOURCE_MGR->GetTexture(ballname));
+	}
+	Anims.push_back(ball1);
+
 	ball = new Ball();
-	ball->SetTexture(*RESOURCE_MGR->GetTexture("graphics/1.png"));
-	ball->SetPos({ 1280 * 0.5f, 720 * 0.9f });
-	ball->SetSpeed(500);
+	ball->SetActive(true);
+	ball->SetAnim(ball1);
+	ball->Init();
 	objList.push_back(ball);
 
 	TextObject* ui1 = new TextObject();
@@ -40,9 +48,9 @@ void SceneDev1::Exit()
 
 void SceneDev1::Update(float dt)
 {
-	if (InputMgr::GetKeyDown(Keyboard::Return))
+	for (auto anim : Anims)
 	{
-		SOUND_MGR->Play("sound/select.wav");
+		anim->Update(dt);
 	}
 	Scene::Update(dt);
 	ball->OnCollisionScreen(FRAMEWORK->GetWindowSize());

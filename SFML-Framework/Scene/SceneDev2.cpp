@@ -9,7 +9,7 @@ SceneDev2::SceneDev2()
 	:Scene(Scenes::Dev2)
 {
 	SpriteObj* obj = new SpriteObj();
-	obj->SetTexture(*RESOURCE_MGR->GetTexture("graphics/player5.png"));
+	obj->SetTexture(*RESOURCE_MGR->GetTexture("graphics/redball1.png"));
 	objList.push_back(obj);
 
 	TextObject* ui1 = new TextObject();

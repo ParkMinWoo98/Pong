@@ -1,10 +1,12 @@
 #include "Ball.h"
 #include "../Framework/InputMgr.h"
+#include "../Framework/ResourceMgr.h"
 #include <cmath>
+
 constexpr auto PI = 3.141592;
 
 Ball::Ball()
-	:speed(0), angle(0), isMoving(false)
+	:speed(500), angle(0), isMoving(false), anim(nullptr)
 {
 }
 
@@ -15,6 +17,11 @@ Ball::~Ball()
 void Ball::Init()
 {
 	SpriteObj::Init();
+	if (anim != nullptr)
+	{
+		SetTexture(anim->GetTexture());
+		anim->Init();
+	}
 	SetPos({ 1280 * 0.5f, 720 * 0.9f });
 	isMoving = false;
 }
@@ -22,6 +29,7 @@ void Ball::Init()
 void Ball::Update(float dt)
 {
 	SpriteObj::Update(dt);
+	SetTexture(anim->GetTexture());
 	if (!isMoving)
 	{
 		ChangeDir(dt);
@@ -43,6 +51,11 @@ void Ball::SetTexture(const Texture& tex)
 {
 	SpriteObj::SetTexture(tex);
 	SetOrigin(Origins::BC);
+}
+
+void Ball::SetAnim(Animation* anim)
+{
+	this->anim = anim;
 }
 
 void Ball::SetSpeed(float speed)

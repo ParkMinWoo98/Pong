@@ -1,10 +1,12 @@
 #pragma once
 #include "Scene.h"
 #include "../GameObject/Ball.h"
+#include "../GameObject/Animation.h"
 
 class SceneDev1 : public Scene
 {
 protected:
+	list<Animation*> Anims;
 	Ball* ball;
 public:
 	SceneDev1();
