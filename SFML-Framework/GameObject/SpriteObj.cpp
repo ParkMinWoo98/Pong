@@ -40,7 +40,7 @@ void SpriteObj::SetRotation(float rotate)
 	sprite.setRotation(rotation);
 }
 
-void SpriteObj::SetTexture(Texture& tex)
+void SpriteObj::SetTexture(const Texture& tex)
 {
 	sprite.setTexture(tex);
 }

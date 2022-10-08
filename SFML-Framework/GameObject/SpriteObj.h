@@ -18,6 +18,6 @@ public:
 	virtual void SetPos(const Vector2f& pos);
 	virtual void SetRotation(float rotate);
 
-	virtual void SetTexture(Texture& tex);
+	virtual void SetTexture(const Texture& tex);
 };
 
