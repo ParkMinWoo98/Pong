@@ -3,8 +3,9 @@
 
 int main()
 {
-    Framework framework(1280, 720);
-    framework.Init();
-    framework.Do();
+    Framework* framework = FRAMEWORK;
+    framework->SetWindowSize(1280, 720);
+    framework->Init();
+    framework->Do();
     return 0;
 }

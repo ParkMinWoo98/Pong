@@ -9,6 +9,7 @@ protected:
 	Vector2f ballCenter;
 
 	float speed;
+	float angle;
 	Vector2f currDir;
 	bool isMoving;
 
@@ -22,9 +23,8 @@ public:
 	virtual void Draw(RenderWindow& window) override;
 	virtual void SetTexture(const Texture& texture);
 
-	void SetBallRect();
-	void SetBallCenter();
 	void SetSpeed(float speed);
+	void SetRotation();
 
 	void ChangeDir(float dt);
 	void Fire();

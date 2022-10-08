@@ -1,11 +1,11 @@
 #pragma once
 #include "Scene.h"
+#include "../GameObject/Ball.h"
 
 class SceneDev1 : public Scene
 {
 protected:
-
-
+	Ball* ball;
 public:
 	SceneDev1();
 	virtual ~SceneDev1();

@@ -1,21 +1,21 @@
 #include "SceneDev1.h"
 #include "SceneMgr.h"
+#include "../Framework/Framework.h"
 #include "../Framework/InputMgr.h"
 #include "../Framework/ResourceMgr.h"
 #include "../GameObject/SpriteObj.h"
 #include "../GameObject/TextObject.h"
 #include "../Framework/SoundMgr.h"
-#include "../GameObject/Player.h"
+#include "../GameObject/Ball.h"
 
 SceneDev1::SceneDev1()
 	:Scene(Scenes::Dev1)
 {
-	Player* obj = new Player();
-	obj->SetTexture(*RESOURCE_MGR->GetTexture("graphics/player3.png"));
-	obj->SetPos({ 1280 * 0.5f, 720 * 0.5f });
-	obj->SetOrigin(Origins::MC);
-	obj->SetActive(true);
-	objList.push_back(obj);
+	ball = new Ball();
+	ball->SetTexture(*RESOURCE_MGR->GetTexture("graphics/1.png"));
+	ball->SetPos({ 1280 * 0.5f, 720 * 0.9f });
+	ball->SetSpeed(500);
+	objList.push_back(ball);
 
 	TextObject* ui1 = new TextObject();
 	ui1->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
@@ -44,11 +44,8 @@ void SceneDev1::Update(float dt)
 	{
 		SOUND_MGR->Play("sound/select.wav");
 	}
-	if (InputMgr::GetKeyDown(Keyboard::Space))
-	{
-		SCENE_MGR->ChangeScene(Scenes::Dev2);
-	}
 	Scene::Update(dt);
+	ball->OnCollisionScreen(FRAMEWORK->GetWindowSize());
 }
 
 void SceneDev1::Draw(RenderWindow& window)

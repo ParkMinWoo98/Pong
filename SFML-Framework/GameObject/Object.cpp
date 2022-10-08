@@ -22,6 +22,7 @@ bool Object::GetActive() const
 
 void Object::Init()
 {
+	rotation = 0;
 }
 
 void Object::Release()

@@ -5,15 +5,25 @@
 #include "ResourceMgr.h"
 #include "SoundMgr.h"
 
-Framework::Framework(int width, int height)
-	:windowSize(width, height), timeScale(1.f)
+Framework::Framework()
+    :timeScale(1.f)
 {
-	window.create(VideoMode(windowSize.x, windowSize.y), "Game");
 }
 
 Framework::~Framework()
 {
 
+}
+
+void Framework::SetWindowSize(int width, int height)
+{
+    windowSize = Vector2i(width, height);
+    window.create(VideoMode(windowSize.x, windowSize.y), "Game");
+}
+
+const Vector2i& Framework::GetWindowSize() const
+{
+    return windowSize;
 }
 
 float Framework::GetDT() const

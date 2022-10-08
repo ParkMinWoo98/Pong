@@ -10,6 +10,7 @@ SpriteObj::~SpriteObj()
 
 void SpriteObj::Init()
 {
+	Object::Init();
 }
 
 void SpriteObj::Update(float dt)
