@@ -25,6 +25,7 @@ public:
 	virtual void Enter() = 0;
 	virtual void Exit() = 0;
 
+	virtual void Init();
 	virtual void Update(float dt);
 	virtual void Draw(RenderWindow& window);
 };

@@ -1,7 +1,7 @@
 #include "Animation.h"
 
 Animation::Animation()
-	:count(0), cycle(0), time(0)
+	:count(0), cycle(0), time(0), rotation(0), isActive(true), isLoop(true)
 {
 }
 
@@ -34,14 +34,51 @@ void Animation::SetRotation(float rotate)
 	sprites[count]->setRotation(rotate);
 }
 
+void Animation::SetColor(Color color)
+{
+	for (auto sprite : sprites)
+	{
+		sprite->setColor(color);
+	}
+}
+
+void Animation::SetSize(const Vector2f& scale)
+{
+	for (auto sprite : sprites)
+	{
+		sprite->scale(scale);
+	}
+}
+
+void Animation::FlipX(bool isFlipped)
+{
+	for (auto sprite : sprites)
+	{
+		if (isFlipped)
+			sprite->setScale(abs(sprite->getScale().x), abs(sprite->getScale().y));
+		else
+			sprite->setScale(-abs(sprite->getScale().x), abs(sprite->getScale().y));
+	}
+}
+
+void Animation::SetLoop(bool isLoop)
+{
+	this->isLoop = isLoop;
+}
+
 Sprite* Animation::GetSprite() const
 {
 	return sprites[count];
 }
 
-const FloatRect& Animation::GetRect()
+FloatRect Animation::GetRect() const
 {
 	return sprites[count]->getGlobalBounds();
+}
+
+bool Animation::GetActive() const
+{
+	return isActive;
 }
 
 void Animation::Init()
@@ -52,20 +89,26 @@ void Animation::Init()
 
 void Animation::Update(float dt)
 {
-	time += dt;
-	if (time >= cycle)
+	if (isActive)
 	{
-		time = 0.f;
-		if (count == sprites.size() - 1)
-			count = 0;
-		else
-			++count;
+		time += dt;
+		if (time >= cycle)
+		{
+			if (!isLoop)
+				isActive = false;
+			time = 0.f;
+			if (count == sprites.size() - 1)
+				count = 0;
+			else
+				++count;
+		}
+		sprites[count]->setPosition(position);
+		sprites[count]->setRotation(rotation);
 	}
-	sprites[count]->setPosition(position);
-	sprites[count]->setRotation(rotation);
 }
 
 void Animation::Draw(RenderWindow& window)
 {
-	window.draw(*sprites[count]);
+	if(isActive)
+		window.draw(*sprites[count]);
 }

@@ -6,52 +6,76 @@
 constexpr auto PI = 3.141592;
 
 Ball::Ball()
-	:speed(500), angle(0), isMoving(false), anim(nullptr)
+	:speed(500), angle(0), isMoving(false), curAnim(nullptr),
+	isEffectOn(false), effectTimer(0.f), effectTimerSet(5.f), effect(Effects::None)
 {
-	anim = new Animation();
-	anim->SetCycle(0.1f);
-	string ballname[] = { "graphics/redball1.png", "graphics/redball2.png", "graphics/redball3.png", "graphics/redball4.png", "graphics/redball5.png" ,"graphics/redball6.png" };
-	for (auto& ball : ballname)
+	vector<vector<string>> ballnames;
+	ballnames.push_back({ "graphics/ninja/1.png", "graphics/ninja/2.png", "graphics/ninja/3.png", "graphics/ninja/4.png", "graphics/ninja/5.png", "graphics/ninja/6.png" });
+	ballnames.push_back({"graphics/ninja/dash1.png", "graphics/ninja/dash2.png", "graphics/ninja/dash3.png", "graphics/ninja/dash4.png", "graphics/ninja/dash5.png", "graphics/ninja/dash6.png" });
+	ballnames.push_back({ "graphics/ninja/breaker1.png", "graphics/ninja/breaker2.png", "graphics/ninja/breaker3.png", "graphics/ninja/breaker4.png", "graphics/ninja/breaker5.png",
+		"graphics/ninja/breaker6.png", "graphics/ninja/breaker7.png", "graphics/ninja/breaker8.png", "graphics/ninja/breaker9.png", "graphics/ninja/breaker10.png",
+		"graphics/ninja/breaker11.png", "graphics/ninja/breaker12.png" });
+	for (const auto& ballname : ballnames)
 	{
-		anim->SetSprite(*RESOURCE_MGR->GetTexture(ball), Origins::BC);
+		Animation* anim = new Animation();
+		anim->SetCycle(0.1f);
+		for (auto& ball : ballname)
+		{
+			anim->SetSprite(*RESOURCE_MGR->GetTexture(ball), Origins::BC);
+		}
+		anims.push_back(anim);
 	}
+	curAnim = anims[0];
 }
 
 Ball::~Ball()
 {
+	for (auto anim : anims)
+	{
+		delete anim;
+	}
 }
 
 void Ball::Init()
 {
 	Object::Init();
-	anim->Init();
-	position = Vector2f(1280 * 0.5f, 720 * 0.9f);
-	rotation = 0.f;
-	anim->SetPos(position);
-	anim->SetRotation(rotation);
+	curAnim->Init();
 	isMoving = false;
+	FlipX();
+	if (isEffectOn)
+		EffectOff();
+	effectTimer = 0.f;
+	position = Vector2f(640 * 0.5f, 1000 * 0.95f);
+	curAnim->SetPos(position);
+	curAnim->SetRotation(rotation);
 }
 
 void Ball::Update(float dt)
 {
 	Object::Update(dt);
-	anim->Update(dt);
+	curAnim->Update(dt);
 	if (!isMoving)
 	{
 		ChangeDir(dt);
-		anim->SetRotation(rotation);
+		curAnim->SetRotation(rotation);
 		if (InputMgr::GetKeyDown(Keyboard::Space))
 			Fire();
 		return;
 	}
+	if (isEffectOn)
+	{
+		effectTimer -= dt;
+		if (effectTimer <= 0.f)
+			EffectOff();
+	}
 	position += currDir * speed * dt;
 	SetRotation();
-	anim->SetPos(position);
+	curAnim->SetPos(position);
 }
 
 void Ball::Draw(RenderWindow& window)
 {
-	anim->Draw(window);
+	curAnim->Draw(window);
 }
 
 void Ball::SetSpeed(float speed)
@@ -61,11 +85,60 @@ void Ball::SetSpeed(float speed)
 
 void Ball::SetRotation()
 {
-	angle = acos(currDir.x);
-	if (currDir.y < 0)
-		angle = 2 * PI - angle;
-	rotation = angle / 2 / PI * 360 + 90;
-	anim->SetRotation(rotation);
+	angle = asin(currDir.x);
+	if (currDir.y > 0)
+		angle = PI - angle;
+	rotation = angle / 2 / PI * 360;
+	curAnim->SetRotation(rotation);
+}
+
+void Ball::FlipX()
+{
+	curAnim->FlipX(currDir.x >= 0.f);
+}
+
+void Ball::EffectOn(Effects effect)
+{
+	if(isEffectOn)
+		EffectOff();
+	this->effect = effect;
+	switch (this->effect)
+	{
+	case Effects::SizeUp:
+		curAnim->SetSize(Vector2f(2.f, 2.f));
+		break;
+	case Effects::SpeedUp:
+		curAnim = anims[1];
+		speed *= 2.f;
+		break;
+	case Effects::Breaker:
+		curAnim = anims[2];
+		break;
+	default:
+		break;
+	}
+	isEffectOn = true;
+	effectTimer = effectTimerSet;
+}
+
+void Ball::EffectOff()
+{
+	switch (effect)
+	{
+	case Effects::SizeUp:
+		curAnim->SetSize(Vector2f(0.5f, 0.5f));
+		break;
+	case Effects::SpeedUp:
+		curAnim = anims[0];
+		speed *= 0.5f;
+		break;
+	case Effects::Breaker:
+		curAnim = anims[0];
+		break;
+	default:
+		break;
+	}
+	isEffectOn = false;
 }
 
 void Ball::ChangeDir(float dt)
@@ -79,8 +152,9 @@ void Ball::ChangeDir(float dt)
 		rotation = 90;
 	if (rotation < -90)
 		rotation = -90;
-	angle = (rotation - 90) / 360 * 2 * PI;
-	currDir = Vector2f(cos(angle), sin(angle));
+	angle = rotation / 360 * 2 * PI;
+	currDir = Vector2f(sin(angle), -cos(angle));
+	FlipX();
 }
 
 void Ball::Fire()
@@ -88,13 +162,18 @@ void Ball::Fire()
 	isMoving = true;
 }
 
-bool Ball::OnCollision(const FloatRect& rect)
+bool Ball::CollideWith(const FloatRect& rect)
 {
-	ballRect = anim->GetRect();
+	ballRect = curAnim->GetRect();
+	return ballRect.intersects(rect);
+}
+
+void Ball::OnCollision(const FloatRect& rect)
+{
 	ballCenter.x = ballRect.left + ballRect.width * 0.5f;
 	ballCenter.y = ballRect.top + ballRect.height * 0.5f;
-	if (!ballRect.intersects(rect))
-		return false;
+	if (isEffectOn && effect == Effects::Breaker)
+		return;
 
 	if (ballCenter.x < rect.left && currDir.x > 0)
 	{
@@ -116,13 +195,13 @@ bool Ball::OnCollision(const FloatRect& rect)
 		position.y = rect.top;
 		currDir.y *= -1;
 	}
-	anim->SetPos(position);
-	return true;
+	FlipX();
+	curAnim->SetPos(position);
 }
 
-bool Ball::OnCollisionScreen(const Vector2i& windowSize)
+void Ball::OnCollisionScreen(const Vector2i& windowSize)
 {
-	ballRect = anim->GetRect();
+	ballRect = curAnim->GetRect();
 	if (ballRect.top < 0.f)
 	{
 		position.y = ballRect.height;
@@ -142,6 +221,6 @@ bool Ball::OnCollisionScreen(const Vector2i& windowSize)
 		position.x = windowSize.x - ballRect.width * 0.5f;
 		currDir.x *= -1;
 	}
-	anim->SetPos(position);
-	return true;
+	FlipX();
+	curAnim->SetPos(position);
 }

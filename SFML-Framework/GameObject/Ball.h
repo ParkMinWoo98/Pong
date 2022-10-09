@@ -3,6 +3,14 @@
 #include <SFML/Graphics.hpp>
 #include "Animation.h"
 
+enum class Effects
+{
+	None = -1,
+	SizeUp,
+	SpeedUp,
+	Breaker,
+};
+
 class Ball : public Object
 {
 protected:
@@ -14,7 +22,14 @@ protected:
 	Vector2f currDir;
 	bool isMoving;
 
-	Animation* anim;
+	float effectTimer;
+	float effectTimerSet;
+	bool isEffectOn;
+	Effects effect;
+
+	Animation* curAnim;
+	vector<Animation*> anims;
+
 public:
 	Ball();
 	virtual ~Ball();
@@ -26,9 +41,14 @@ public:
 
 	void SetSpeed(float speed);
 	void SetRotation();
+	void FlipX();
+
+	void EffectOn(Effects effect);
+	void EffectOff();
 
 	void ChangeDir(float dt);
 	void Fire();
-	bool OnCollision(const FloatRect& rect);
-	bool OnCollisionScreen(const Vector2i& windowSize);
+	bool CollideWith(const FloatRect& rect);
+	void OnCollision(const FloatRect& rect);
+	void OnCollisionScreen(const Vector2i& windowSize);
 };

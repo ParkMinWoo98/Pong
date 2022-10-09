@@ -13,6 +13,11 @@ void SpriteObj::Init()
 	Object::Init();
 }
 
+void SpriteObj::Release()
+{
+	Object::Release();
+}
+
 void SpriteObj::Update(float dt)
 {
 	sprite.setPosition(position);
@@ -39,6 +44,16 @@ void SpriteObj::SetRotation(float rotate)
 {
 	Object::SetRotation(rotate);
 	sprite.setRotation(rotation);
+}
+
+void SpriteObj::SetColor(Color color)
+{
+	sprite.setColor(color);
+}
+
+FloatRect SpriteObj::GetRect() const
+{
+	return sprite.getGlobalBounds();
 }
 
 void SpriteObj::SetTexture(const Texture& tex)

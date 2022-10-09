@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameObject\Block.cpp" />
     <ClCompile Include="GameObject\Animation.cpp" />
     <ClCompile Include="GameObject\Ball.cpp" />
     <ClCompile Include="DataTable\DataTable.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="Framework\InputMgr.cpp" />
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="Framework\Utils.cpp" />
+    <ClCompile Include="GameObject\Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
@@ -168,6 +170,7 @@
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="GameObject\Block.h" />
     <ClInclude Include="GameObject\Animation.h" />
     <ClInclude Include="GameObject\Ball.h" />
     <ClInclude Include="DataTable\DataTable.h" />
@@ -178,6 +181,7 @@
     <ClInclude Include="Framework\ResourceMgr.h" />
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="GameObject\Object.h" />
+    <ClInclude Include="GameObject\Item.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneDev1.h" />
     <ClInclude Include="Scene\SceneDev2.h" />

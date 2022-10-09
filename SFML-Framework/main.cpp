@@ -4,7 +4,7 @@
 int main()
 {
     Framework* framework = FRAMEWORK;
-    framework->SetWindowSize(1280, 720);
+    framework->SetWindowSize(640, 1000);
     framework->Init();
     framework->Do();
     return 0;
