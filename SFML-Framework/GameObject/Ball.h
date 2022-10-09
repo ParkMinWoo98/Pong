@@ -1,9 +1,9 @@
 #pragma once
-#include "SpriteObj.h"
+#include "Object.h"
 #include <SFML/Graphics.hpp>
 #include "Animation.h"
 
-class Ball : public SpriteObj
+class Ball : public Object
 {
 protected:
 	FloatRect ballRect;
@@ -23,9 +23,7 @@ public:
 	virtual void Release() override {}
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
-	virtual void SetTexture(const Texture& texture);
 
-	void SetAnim(Animation* anim);
 	void SetSpeed(float speed);
 	void SetRotation();
 

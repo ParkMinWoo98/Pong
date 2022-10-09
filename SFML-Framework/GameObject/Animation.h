@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "../Framework/Utils.h"
 
 using namespace sf;
 using namespace std;
@@ -8,20 +9,27 @@ using namespace std;
 class Animation
 {
 private:
-	vector<Texture*> textures;
+	vector<Sprite*> sprites;
 	int count;
 	float cycle;
 	float time;
+
+	Vector2f position;
+	float rotation;
 public:
 	Animation();
 	~Animation();
 
-	void SetTexture(Texture& tex);
+	void SetSprite(const Texture& tex, Origins origin);
 	void SetCycle(float cycle);
+	void SetPos(const Vector2f& pos);
+	void SetRotation(float rotate);
 
-	const Texture& GetTexture();
+	Sprite* GetSprite() const;
+	const FloatRect& GetRect();
 
 	void Init();
 	void Update(float dt);
+	void Draw(RenderWindow& window);
 };
 

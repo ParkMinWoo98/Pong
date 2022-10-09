@@ -8,6 +8,13 @@ constexpr auto PI = 3.141592;
 Ball::Ball()
 	:speed(500), angle(0), isMoving(false), anim(nullptr)
 {
+	anim = new Animation();
+	anim->SetCycle(0.1f);
+	string ballname[] = { "graphics/redball1.png", "graphics/redball2.png", "graphics/redball3.png", "graphics/redball4.png", "graphics/redball5.png" ,"graphics/redball6.png" };
+	for (auto& ball : ballname)
+	{
+		anim->SetSprite(*RESOURCE_MGR->GetTexture(ball), Origins::BC);
+	}
 }
 
 Ball::~Ball()
@@ -16,46 +23,35 @@ Ball::~Ball()
 
 void Ball::Init()
 {
-	SpriteObj::Init();
-	if (anim != nullptr)
-	{
-		SetTexture(anim->GetTexture());
-		anim->Init();
-	}
-	SetPos({ 1280 * 0.5f, 720 * 0.9f });
+	Object::Init();
+	anim->Init();
+	position = Vector2f(1280 * 0.5f, 720 * 0.9f);
+	rotation = 0.f;
+	anim->SetPos(position);
+	anim->SetRotation(rotation);
 	isMoving = false;
 }
 
 void Ball::Update(float dt)
 {
-	SpriteObj::Update(dt);
-	SetTexture(anim->GetTexture());
+	Object::Update(dt);
+	anim->Update(dt);
 	if (!isMoving)
 	{
 		ChangeDir(dt);
+		anim->SetRotation(rotation);
 		if (InputMgr::GetKeyDown(Keyboard::Space))
 			Fire();
 		return;
 	}
 	position += currDir * speed * dt;
 	SetRotation();
-	sprite.setPosition(position);
+	anim->SetPos(position);
 }
 
 void Ball::Draw(RenderWindow& window)
 {
-	SpriteObj::Draw(window);
-}
-
-void Ball::SetTexture(const Texture& tex)
-{
-	SpriteObj::SetTexture(tex);
-	SetOrigin(Origins::BC);
-}
-
-void Ball::SetAnim(Animation* anim)
-{
-	this->anim = anim;
+	anim->Draw(window);
 }
 
 void Ball::SetSpeed(float speed)
@@ -69,7 +65,7 @@ void Ball::SetRotation()
 	if (currDir.y < 0)
 		angle = 2 * PI - angle;
 	rotation = angle / 2 / PI * 360 + 90;
-	sprite.setRotation(rotation);
+	anim->SetRotation(rotation);
 }
 
 void Ball::ChangeDir(float dt)
@@ -94,7 +90,7 @@ void Ball::Fire()
 
 bool Ball::OnCollision(const FloatRect& rect)
 {
-	ballRect = sprite.getGlobalBounds();
+	ballRect = anim->GetRect();
 	ballCenter.x = ballRect.left + ballRect.width * 0.5f;
 	ballCenter.y = ballRect.top + ballRect.height * 0.5f;
 	if (!ballRect.intersects(rect))
@@ -120,13 +116,13 @@ bool Ball::OnCollision(const FloatRect& rect)
 		position.y = rect.top;
 		currDir.y *= -1;
 	}
-	sprite.setPosition(position);
+	anim->SetPos(position);
 	return true;
 }
 
 bool Ball::OnCollisionScreen(const Vector2i& windowSize)
 {
-	ballRect = sprite.getGlobalBounds();
+	ballRect = anim->GetRect();
 	if (ballRect.top < 0.f)
 	{
 		position.y = ballRect.height;
@@ -146,6 +142,6 @@ bool Ball::OnCollisionScreen(const Vector2i& windowSize)
 		position.x = windowSize.x - ballRect.width * 0.5f;
 		currDir.x *= -1;
 	}
-	sprite.setPosition(position);
+	anim->SetPos(position);
 	return true;
 }

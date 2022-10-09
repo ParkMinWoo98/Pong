@@ -6,7 +6,6 @@
 class SceneDev1 : public Scene
 {
 protected:
-	list<Animation*> Anims;
 	Ball* ball;
 public:
 	SceneDev1();

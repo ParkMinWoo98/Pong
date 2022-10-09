@@ -10,18 +10,8 @@
 SceneDev1::SceneDev1()
 	:Scene(Scenes::Dev1)
 {
-	Animation* ball1 = new Animation();
-	ball1->SetCycle(0.1f);
-	string ballname1[] = { "graphics/redball1.png", "graphics/redball2.png", "graphics/redball3.png", "graphics/redball4.png", "graphics/redball5.png" ,"graphics/redball6.png" };
-	for (auto& ballname : ballname1)
-	{
-		ball1->SetTexture(*RESOURCE_MGR->GetTexture(ballname));
-	}
-	Anims.push_back(ball1);
-
 	ball = new Ball();
 	ball->SetActive(true);
-	ball->SetAnim(ball1);
 	ball->Init();
 	objList.push_back(ball);
 
@@ -48,10 +38,6 @@ void SceneDev1::Exit()
 
 void SceneDev1::Update(float dt)
 {
-	for (auto anim : Anims)
-	{
-		anim->Update(dt);
-	}
 	Scene::Update(dt);
 	ball->OnCollisionScreen(FRAMEWORK->GetWindowSize());
 }

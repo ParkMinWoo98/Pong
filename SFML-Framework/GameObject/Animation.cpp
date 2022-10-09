@@ -9,9 +9,12 @@ Animation::~Animation()
 {
 }
 
-void Animation::SetTexture(Texture& tex)
+void Animation::SetSprite(const Texture& tex, Origins origin)
 {
-	textures.push_back(&tex);
+	Sprite* sprite = new Sprite();
+	sprite->setTexture(tex);
+	Utils::SetOrigin(*sprite, origin);
+	sprites.push_back(sprite);
 }
 
 void Animation::SetCycle(float cycle)
@@ -19,9 +22,26 @@ void Animation::SetCycle(float cycle)
 	this->cycle = cycle;
 }
 
-const Texture& Animation::GetTexture()
+void Animation::SetPos(const Vector2f& pos)
 {
-	return *textures[count];
+	position = pos;
+	sprites[count]->setPosition(position);
+}
+
+void Animation::SetRotation(float rotate)
+{
+	rotation = rotate;
+	sprites[count]->setRotation(rotate);
+}
+
+Sprite* Animation::GetSprite() const
+{
+	return sprites[count];
+}
+
+const FloatRect& Animation::GetRect()
+{
+	return sprites[count]->getGlobalBounds();
 }
 
 void Animation::Init()
@@ -36,9 +56,16 @@ void Animation::Update(float dt)
 	if (time >= cycle)
 	{
 		time = 0.f;
-		if (count == textures.size() - 1)
+		if (count == sprites.size() - 1)
 			count = 0;
 		else
 			++count;
 	}
+	sprites[count]->setPosition(position);
+	sprites[count]->setRotation(rotation);
+}
+
+void Animation::Draw(RenderWindow& window)
+{
+	window.draw(*sprites[count]);
 }
