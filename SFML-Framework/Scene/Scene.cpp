@@ -9,6 +9,18 @@ Scene::~Scene()
 {
 }
 
+void Scene::Init()
+{
+	for (const auto& obj : objList)
+	{
+		obj->Init();
+	}
+	for (const auto& obj : UiObjList)
+	{
+		obj->Init();
+	}
+}
+
 void Scene::Update(float dt)
 {
 	for (const auto& obj : objList)

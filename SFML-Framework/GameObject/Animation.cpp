@@ -1,7 +1,7 @@
 #include "Animation.h"
 
 Animation::Animation()
-	:count(0), cycle(0), time(0)
+	:count(0), cycle(0), time(0), rotation(0)
 {
 }
 
@@ -32,6 +32,25 @@ void Animation::SetRotation(float rotate)
 {
 	rotation = rotate;
 	sprites[count]->setRotation(rotate);
+}
+
+void Animation::SetSize(const Vector2f& scale)
+{
+	for (auto sprite : sprites)
+	{
+		sprite->scale(scale);
+	}
+}
+
+void Animation::FlipX(bool isFlipped)
+{
+	for (auto sprite : sprites)
+	{
+		if (isFlipped)
+			sprite->setScale(abs(sprite->getScale().x), abs(sprite->getScale().y));
+		else
+			sprite->setScale(-abs(sprite->getScale().x), abs(sprite->getScale().y));
+	}
 }
 
 Sprite* Animation::GetSprite() const

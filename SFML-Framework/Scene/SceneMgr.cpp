@@ -8,6 +8,7 @@ bool SceneMgr::Init()
 	sceneMap[Scenes::Dev2] = new SceneDev2();
 
 	currScene = Scenes::Dev1;
+	sceneMap[currScene]->Init();
 	sceneMap[currScene]->Enter();
 
 	return true;

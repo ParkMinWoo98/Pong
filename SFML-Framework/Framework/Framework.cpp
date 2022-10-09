@@ -18,7 +18,7 @@ Framework::~Framework()
 void Framework::SetWindowSize(int width, int height)
 {
     windowSize = Vector2i(width, height);
-    window.create(VideoMode(windowSize.x, windowSize.y), "Game");
+    window.create(VideoMode(windowSize.x, windowSize.y), "Game", Style::Resize);
 }
 
 const Vector2i& Framework::GetWindowSize() const

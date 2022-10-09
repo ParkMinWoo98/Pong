@@ -24,6 +24,8 @@ public:
 	void SetCycle(float cycle);
 	void SetPos(const Vector2f& pos);
 	void SetRotation(float rotate);
+	void SetSize(const Vector2f& scale);
+	void FlipX(bool isFlipped);
 
 	Sprite* GetSprite() const;
 	const FloatRect& GetRect();
