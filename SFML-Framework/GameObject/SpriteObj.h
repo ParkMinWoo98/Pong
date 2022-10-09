@@ -19,6 +19,8 @@ public:
 	virtual void SetRotation(float rotate);
 	virtual void SetColor(Color color);
 
+	virtual FloatRect GetRect() const;
+
 	virtual void SetTexture(const Texture& tex);
 };
 

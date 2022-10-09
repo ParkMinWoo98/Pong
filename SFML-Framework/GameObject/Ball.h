@@ -5,6 +5,7 @@
 
 enum class Effects
 {
+	None = -1,
 	SizeUp,
 	SpeedUp,
 	Breaker,

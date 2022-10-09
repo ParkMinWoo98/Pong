@@ -7,7 +7,7 @@ constexpr auto PI = 3.141592;
 
 Ball::Ball()
 	:speed(500), angle(0), isMoving(false), curAnim(nullptr),
-	isEffectOn(false), effectTimer(0.f), effectTimerSet(5.f)
+	isEffectOn(false), effectTimer(0.f), effectTimerSet(5.f), effect(Effects::None)
 {
 	vector<vector<string>> ballnames;
 	ballnames.push_back({ "graphics/ninja/1.png", "graphics/ninja/2.png", "graphics/ninja/3.png", "graphics/ninja/4.png", "graphics/ninja/5.png", "graphics/ninja/6.png" });
@@ -30,12 +30,15 @@ Ball::Ball()
 
 Ball::~Ball()
 {
+	for (auto anim : anims)
+	{
+		delete anim;
+	}
 }
 
 void Ball::Init()
 {
 	Object::Init();
-	enabled = true;
 	curAnim->Init();
 	isMoving = false;
 	FlipX();
@@ -167,7 +170,6 @@ bool Ball::CollideWith(const FloatRect& rect)
 
 void Ball::OnCollision(const FloatRect& rect)
 {
-	ballRect = curAnim->GetRect();
 	ballCenter.x = ballRect.left + ballRect.width * 0.5f;
 	ballCenter.y = ballRect.top + ballRect.height * 0.5f;
 	if (isEffectOn && effect == Effects::Breaker)

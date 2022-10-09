@@ -156,6 +156,7 @@
     <ClCompile Include="Framework\InputMgr.cpp" />
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="Framework\Utils.cpp" />
+    <ClCompile Include="GameObject\Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Framework\ResourceMgr.h" />
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="GameObject\Object.h" />
+    <ClInclude Include="GameObject\Item.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneDev1.h" />
     <ClInclude Include="Scene\SceneDev2.h" />

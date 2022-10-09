@@ -7,15 +7,23 @@ Scene::Scene(Scenes type)
 
 Scene::~Scene()
 {
+	for (auto obj : objList)
+	{
+		delete obj;
+	}
+	for (auto obj : UiObjList)
+	{
+		delete obj;
+	}
 }
 
 void Scene::Init()
 {
-	for (const auto& obj : objList)
+	for (auto obj : objList)
 	{
 		obj->Init();
 	}
-	for (const auto& obj : UiObjList)
+	for (auto obj : UiObjList)
 	{
 		obj->Init();
 	}
@@ -23,12 +31,12 @@ void Scene::Init()
 
 void Scene::Update(float dt)
 {
-	for (const auto& obj : objList)
+	for ( auto obj : objList)
 	{
 		if (obj->GetActive())
 			obj->Update(dt);
 	}
-	for (const auto & obj : UiObjList)
+	for (auto obj : UiObjList)
 	{
 		if (obj->GetActive())
 			obj->Update(dt);
@@ -37,12 +45,12 @@ void Scene::Update(float dt)
 
 void Scene::Draw(RenderWindow& window)
 {
-	for (const auto& obj : objList)
+	for (auto obj : objList)
 	{
 		if (obj->GetActive())
 			obj->Draw(window);
 	}
-	for (const auto& obj : UiObjList)
+	for (auto obj : UiObjList)
 	{
 		if (obj->GetActive())
 			obj->Draw(window);

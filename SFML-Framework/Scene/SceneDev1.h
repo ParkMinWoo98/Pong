@@ -2,12 +2,14 @@
 #include "Scene.h"
 #include "../GameObject/Ball.h"
 #include "../GameObject/Block.h"
+#include "../GameObject/Item.h"
 
 class SceneDev1 : public Scene
 {
 protected:
 	Ball* ball;
 	list<Block*> blocks;
+	list<Item*> items;
 public:
 	SceneDev1();
 	virtual ~SceneDev1();

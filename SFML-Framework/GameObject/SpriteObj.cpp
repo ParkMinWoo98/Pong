@@ -51,6 +51,11 @@ void SpriteObj::SetColor(Color color)
 	sprite.setColor(color);
 }
 
+FloatRect SpriteObj::GetRect() const
+{
+	return sprite.getGlobalBounds();
+}
+
 void SpriteObj::SetTexture(const Texture& tex)
 {
 	sprite.setTexture(tex);

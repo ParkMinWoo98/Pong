@@ -20,11 +20,17 @@ SceneDev1::SceneDev1()
 
 	for (int i = 0; i < 4; ++i)
 	{
-		Block* block = new Block(BlockType::BallSpeedUp);
-		block->SetTexture(*RESOURCE_MGR->GetTexture("graphics/monster_block1.png"));
+		Block* block = new Block();
 		block->SetPos(Vector2f(150.f * i, 300.f ));
 		blocks.push_back(block);
 		objList.push_back(block);
+	}
+
+	for (int i = 0; i < 4; ++i)
+	{
+		Item* item = new Item(ItemType::BallSizeUp);
+		items.push_back(item);
+		objList.push_back(item);
 	}
 
 	TextObject* ui1 = new TextObject();
@@ -57,32 +63,38 @@ void SceneDev1::Update(float dt)
 {
 	Scene::Update(dt);
 	ball->OnCollisionScreen(FRAMEWORK->GetWindowSize());
-	for (const auto& block : blocks)
+	for (auto block : blocks)
 	{
-		if (block->GetActive())
+		if (block->GetAlive())
 		{
 			if (ball->CollideWith(block->GetRect()))
 			{
-				switch (block->GetType())
-				{
-				case BlockType::BallSizeUp:
-					ball->EffectOn(Effects::SizeUp);
-					break;
-				case BlockType::BallSpeedUp:
-					ball->EffectOn(Effects::SpeedUp);
-					break;
-				case BlockType::Breaker:
-					ball->EffectOn(Effects::Breaker);
-					break;
-				case BlockType::BatLengthUp:
-					break;
-				case BlockType::Explode:
-					break;
-				default:
-					break;
-				}
 				ball->OnCollision(block->GetRect());
-				block->Release();
+				block->Die();
+			}
+		}
+	}
+	for (auto item : items)
+	{
+		if (ball->CollideWith(item->GetRect()))
+		{
+			switch (item->GetType())
+			{
+			case ItemType::BallSizeUp:
+				ball->EffectOn(Effects::SizeUp);
+				break;
+			case ItemType::BallSpeedUp:
+				ball->EffectOn(Effects::SpeedUp);
+				break;
+			case ItemType::Breaker:
+				ball->EffectOn(Effects::Breaker);
+				break;
+			case ItemType::BatLengthUp:
+				break;
+			case ItemType::Explode:
+				break;
+			default:
+				break;
 			}
 		}
 	}

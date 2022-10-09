@@ -1,30 +1,28 @@
 #pragma once
-#include "SpriteObj.h"
+#include "Object.h"
+#include "Animation.h"
 
-enum class BlockType
-{
-	Normal,
-	BallSizeUp,
-	BallSpeedUp,
-	Breaker,
-	BatLengthUp,
-	Explode,
-};
+class Item;
 
-class Block : public SpriteObj
+class Block : public Object
 {
 protected:
-	BlockType type;
-	
-	bool isAlive;
+	Animation* curAnim;
+	vector<Animation*> anims;
 
+	Item* item;
+
+	bool isAlive;
 public:
-	Block(BlockType type);
+	Block();
 	virtual ~Block();
 
-	BlockType GetType() const;
-	const FloatRect& GetRect();
+	void SetAlive(bool isAlive);
 	bool GetAlive() const;
+	
+	void Die();
+
+	FloatRect GetRect() const;
 
 	virtual void Init() override;
 	virtual void Release() override;
