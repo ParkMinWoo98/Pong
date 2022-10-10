@@ -4,6 +4,7 @@
 #include "PlayScene.h"
 #include "EndScene.h"
 #include "../Framework/InputMgr.h"
+#include "../Framework/Framework.h"
 
 bool SceneMgr::Init()
 {
@@ -42,6 +43,8 @@ void SceneMgr::ChangeScene(Scenes scene)
 void SceneMgr::Update(float dt)
 {
 	sceneMap[currScene]->Update(dt);
+	if (InputMgr::GetKeyDown(Keyboard::Escape))
+		FRAMEWORK->Done();
 }
 
 void SceneMgr::Draw(RenderWindow& window)

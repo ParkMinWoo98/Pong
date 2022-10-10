@@ -46,6 +46,11 @@ void TextObject::SetRotation(float rotate)
 	text.setRotation(rotation);
 }
 
+void TextObject::SetFillColor(Color color)
+{
+	text.setFillColor(color);
+}
+
 void TextObject::SetString(const string& string)
 {
 	text.setString(string);

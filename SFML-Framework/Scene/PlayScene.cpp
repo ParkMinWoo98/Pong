@@ -79,12 +79,14 @@ PlayScene::PlayScene(Scenes stage)
 	stageText->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	stageText->SetString("Stage " + to_string((int)stage - 1));
 	stageText->SetPos({ 20, 20 });
+	stageText->SetFillColor({ 255, 255, 0, 255 });
 	UiObjList.push_back(stageText);
 
 	ballLife = new TextObject();
 	ballLife->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	ballLife->SetPos(Vector2f(FRAMEWORK->GetWindowSize().x - 20, 20));
 	ballLife->SetOrigin(Origins::TR);
+	ballLife->SetFillColor({ 255, 255, 0, 255 });
 	UiObjList.push_back(ballLife);
 }
 

@@ -2,7 +2,7 @@
 
 ExplosionPool::ExplosionPool()
 {
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < 18; ++i)
     {
         unUsingExp.push_back(new Explosion());
     }

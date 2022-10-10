@@ -7,7 +7,7 @@ ItemPool::ItemPool()
     for (int i = 0; i < (int)ItemType::Count; ++i)
     {
         list<Item*>* items = new list<Item*>();
-        for (int j = 0; j < 5; ++j)
+        for (int j = 0; j < 18; ++j)
         {
             Item* item = new Item((ItemType)i);
             switch ((ItemType)i)

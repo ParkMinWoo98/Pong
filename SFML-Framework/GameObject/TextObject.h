@@ -23,6 +23,7 @@ public:
 	virtual void SetPos(const Vector2f& pos);
 	virtual void SetRotation(float rotate);
 
+	void SetFillColor(Color color);
 	void SetString(const string& string);
 	void SetFont(const Font& font);
 };
