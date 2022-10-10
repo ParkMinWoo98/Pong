@@ -42,12 +42,13 @@ ItemPool::ItemPool()
 ItemPool::~ItemPool()
 {
     Release();
-    for (int i = 0; i < (int)ItemType::Count; ++i)
+    for(auto itemList : unUsingItems)
     {
-        for (auto item : *unUsingItems[i])
+        for (auto item : *itemList)
         {
             delete item;
         }
+        delete itemList;
     }
 }
 
@@ -76,6 +77,13 @@ void ItemPool::ReturnItem(Item* item)
 void ItemPool::Init()
 {
     Release();
+    for (auto itemList : unUsingItems)
+    {
+        for (auto item : *itemList)
+        {
+            item->Init();
+        }
+    }
 }
 
 void ItemPool::Release()

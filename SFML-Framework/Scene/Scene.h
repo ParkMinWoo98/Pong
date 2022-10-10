@@ -26,6 +26,7 @@ public:
 	virtual void Exit() = 0;
 
 	virtual void Init();
+	virtual void Release();
 	virtual void Update(float dt);
 	virtual void Draw(RenderWindow& window);
 };

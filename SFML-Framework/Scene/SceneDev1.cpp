@@ -18,22 +18,17 @@ SceneDev1::SceneDev1()
 	ball = new Ball();
 	objList.push_back(ball);
 
-	itempool = new ItemPool();
+	itemPool = new ItemPool();
 
 	for (int i = 0; i < 4; ++i)
 	{
 		Block* block = new Block();
 		block->SetPos(Vector2f(100 + 150.f * i, 300.f));
-		Item* item = itempool->GetItem();
-		block->SetItem(item);
 		blocks.push_back(block);
 		objList.push_back(block);
-		if (item != nullptr)
-		{
-			items.push_back(item);
-			objList.push_back(item);
-		}
 	}
+
+	expPool = new ExplosionPool();
 
 	TextObject* ui1 = new TextObject();
 	ui1->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
@@ -44,9 +39,9 @@ SceneDev1::SceneDev1()
 
 SceneDev1::~SceneDev1()
 {
-	if (itempool != nullptr)
-		delete itempool;
-	itempool = nullptr;
+	if (itemPool != nullptr)
+		delete itemPool;
+	itemPool = nullptr;
 }
 
 void SceneDev1::Enter()
@@ -61,12 +56,52 @@ void SceneDev1::Exit()
 
 void SceneDev1::Init()
 {
+	Release();
 	Scene::Init();
+	itemPool->Init();
+	expPool->Init();
+	for (auto it = blocks.begin(); it != blocks.end(); ++it)
+	{
+		Item* item = itemPool->GetItem();
+		(*it)->SetItem(item);
+		if (item != nullptr)
+		{
+			items.push_back(item);
+			objList.push_back(item);
+		}
+	}
+}
+
+void SceneDev1::Release()
+{
+	for (auto item : items)
+	{
+		itemPool->ReturnItem(item);
+	}
+	items.clear();
+	for (auto exp : exps)
+	{
+		expPool->ReturnExplosion(exp);
+	}
+	exps.clear();
+	Scene::Release();
 }
 
 void SceneDev1::Update(float dt)
 {
 	Scene::Update(dt);
+	for (auto it = exps.begin(); it != exps.end();)
+	{
+		(*it)->Update(dt);
+		if (!(*it)->GetActive())
+		{
+			expPool->ReturnExplosion((*it));
+			it = exps.erase(it);
+			continue;
+		}
+		++it;
+	}
+
 	ball->OnCollisionScreen(FRAMEWORK->GetWindowSize());
 	for (auto block : blocks)
 	{
@@ -77,15 +112,22 @@ void SceneDev1::Update(float dt)
 				ball->OnCollision(block->GetRect());
 				block->Die();
 			}
+			for (auto exp : exps)
+			{
+				if (exp->CollideWith(block->GetRect()))
+				{
+					block->Die();
+				}
+			}
 		}
 	}
-	for (auto item : items)
+	for (auto it = items.begin(); it != items.end();)
 	{
-		if (item->GetActive())
+		if ((*it)->GetActive())
 		{
-			if (ball->CollideWith(item->GetRect()))
+			if (ball->CollideWith((*it)->GetRect()))
 			{
-				switch (item->GetType())
+				switch ((*it)->GetType())
 				{
 				case ItemType::BallSizeUp:
 					ball->EffectOn(Effects::SizeUp);
@@ -99,18 +141,32 @@ void SceneDev1::Update(float dt)
 				case ItemType::BatLengthUp:
 					break;
 				case ItemType::Explode:
+					{
+						Explosion* exp = expPool->GetExplosion();
+						exp->SetPos((*it)->GetPos());
+						exp->Explode();
+						exps.push_back(exp);
+					}
 					break;
 				default:
 					break;
 				}
-				item->SetActive(false);
-				itempool->ReturnItem(item);
+				(*it)->SetActive(false);
+				itemPool->ReturnItem((*it));
+				objList.remove((*it));
+				it = items.erase(it);
+				continue;
 			}
 		}
+		++it;
 	}
 }
 
 void SceneDev1::Draw(RenderWindow& window)
 {
 	Scene::Draw(window);
+	for (auto exp : exps)
+	{
+		exp->Draw(window);
+	}
 }

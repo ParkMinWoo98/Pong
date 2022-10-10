@@ -94,11 +94,13 @@ void Animation::Update(float dt)
 		time += dt;
 		if (time >= cycle)
 		{
-			if (!isLoop)
-				isActive = false;
 			time = 0.f;
 			if (count == sprites.size() - 1)
+			{
+				if (!isLoop)
+					isActive = false;
 				count = 0;
+			}				
 			else
 				++count;
 		}

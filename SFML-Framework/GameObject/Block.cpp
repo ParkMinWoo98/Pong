@@ -65,7 +65,12 @@ FloatRect Block::GetRect() const
 void Block::Init()
 {
 	Object::Init();
-	curAnim->Init();
+	isAlive = true;
+	for (auto anim : anims)
+	{
+		anim->Init();
+	}
+	curAnim = anims[0];
 	for(auto& anim : anims)
 		anim->SetPos(position);
 }

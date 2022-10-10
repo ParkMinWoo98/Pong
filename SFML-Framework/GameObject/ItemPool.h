@@ -8,6 +8,7 @@ class ItemPool
 private:
 	vector<list<Item*>*> unUsingItems;
 	vector<list<Item*>*> usingItems;
+
 public:
 	ItemPool();
 	~ItemPool();

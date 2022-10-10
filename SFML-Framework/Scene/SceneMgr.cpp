@@ -1,6 +1,7 @@
 #include "SceneMgr.h"
 #include "SceneDev1.h"
 #include "SceneDev2.h"
+#include "../Framework/InputMgr.h"
 
 bool SceneMgr::Init()
 {
@@ -28,12 +29,15 @@ void SceneMgr::ChangeScene(Scenes scene)
 {
 	sceneMap[currScene]->Exit();
 	currScene = scene;
+	sceneMap[currScene]->Init();
 	sceneMap[currScene]->Enter();
 }
 
 void SceneMgr::Update(float dt)
 {
 	sceneMap[currScene]->Update(dt);
+	if (InputMgr::GetKeyDown(Keyboard::Return))
+		ChangeScene((Scenes)(1 - (int)currScene));
 }
 
 void SceneMgr::Draw(RenderWindow& window)

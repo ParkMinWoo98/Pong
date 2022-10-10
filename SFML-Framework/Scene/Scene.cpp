@@ -21,6 +21,18 @@ void Scene::Init()
 	}
 }
 
+void Scene::Release()
+{
+	for (auto obj : objList)
+	{
+		obj->Release();
+	}
+	for (auto obj : UiObjList)
+	{
+		obj->Release();
+	}
+}
+
 void Scene::Update(float dt)
 {
 	for ( auto obj : objList)
