@@ -25,6 +25,10 @@ Block::Block()
 
 Block::~Block()
 {
+	for (auto anim : anims)
+	{
+		delete anim;
+	}
 }
 
 void Block::SetAlive(bool isAlive)
@@ -35,6 +39,11 @@ void Block::SetAlive(bool isAlive)
 bool Block::GetAlive() const
 {
 	return isAlive;
+}
+
+void Block::SetItem(Item* item)
+{
+	this->item = item;
 }
 
 void Block::Die()

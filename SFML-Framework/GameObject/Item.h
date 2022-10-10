@@ -3,11 +3,13 @@
 
 enum class ItemType
 {
+	None = -1,
 	BallSizeUp,
 	BallSpeedUp,
 	Breaker,
 	BatLengthUp,
 	Explode,
+	Count,
 };
 
 class Item : public SpriteObj

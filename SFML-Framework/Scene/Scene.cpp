@@ -7,14 +7,6 @@ Scene::Scene(Scenes type)
 
 Scene::~Scene()
 {
-	for (auto obj : objList)
-	{
-		delete obj;
-	}
-	for (auto obj : UiObjList)
-	{
-		delete obj;
-	}
 }
 
 void Scene::Init()

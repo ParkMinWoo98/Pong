@@ -19,6 +19,7 @@ public:
 
 	void SetAlive(bool isAlive);
 	bool GetAlive() const;
+	void SetItem(Item* item);
 	
 	void Die();
 

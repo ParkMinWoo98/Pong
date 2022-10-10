@@ -18,19 +18,21 @@ SceneDev1::SceneDev1()
 	ball = new Ball();
 	objList.push_back(ball);
 
-	for (int i = 0; i < 4; ++i)
-	{
-		Block* block = new Block();
-		block->SetPos(Vector2f(150.f * i, 300.f ));
-		blocks.push_back(block);
-		objList.push_back(block);
-	}
+	itempool = new ItemPool();
 
 	for (int i = 0; i < 4; ++i)
 	{
-		Item* item = new Item(ItemType::BallSizeUp);
-		items.push_back(item);
-		objList.push_back(item);
+		Block* block = new Block();
+		block->SetPos(Vector2f(100 + 150.f * i, 300.f));
+		Item* item = itempool->GetItem();
+		block->SetItem(item);
+		blocks.push_back(block);
+		objList.push_back(block);
+		if (item != nullptr)
+		{
+			items.push_back(item);
+			objList.push_back(item);
+		}
 	}
 
 	TextObject* ui1 = new TextObject();
@@ -42,6 +44,9 @@ SceneDev1::SceneDev1()
 
 SceneDev1::~SceneDev1()
 {
+	if (itempool != nullptr)
+		delete itempool;
+	itempool = nullptr;
 }
 
 void SceneDev1::Enter()
@@ -76,25 +81,30 @@ void SceneDev1::Update(float dt)
 	}
 	for (auto item : items)
 	{
-		if (ball->CollideWith(item->GetRect()))
+		if (item->GetActive())
 		{
-			switch (item->GetType())
+			if (ball->CollideWith(item->GetRect()))
 			{
-			case ItemType::BallSizeUp:
-				ball->EffectOn(Effects::SizeUp);
-				break;
-			case ItemType::BallSpeedUp:
-				ball->EffectOn(Effects::SpeedUp);
-				break;
-			case ItemType::Breaker:
-				ball->EffectOn(Effects::Breaker);
-				break;
-			case ItemType::BatLengthUp:
-				break;
-			case ItemType::Explode:
-				break;
-			default:
-				break;
+				switch (item->GetType())
+				{
+				case ItemType::BallSizeUp:
+					ball->EffectOn(Effects::SizeUp);
+					break;
+				case ItemType::BallSpeedUp:
+					ball->EffectOn(Effects::SpeedUp);
+					break;
+				case ItemType::Breaker:
+					ball->EffectOn(Effects::Breaker);
+					break;
+				case ItemType::BatLengthUp:
+					break;
+				case ItemType::Explode:
+					break;
+				default:
+					break;
+				}
+				item->SetActive(false);
+				itempool->ReturnItem(item);
 			}
 		}
 	}
