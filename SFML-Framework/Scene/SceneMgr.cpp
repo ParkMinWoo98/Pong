@@ -1,14 +1,20 @@
 #include "SceneMgr.h"
-#include "SceneDev1.h"
-#include "SceneDev2.h"
+#include "StartScene.h"
+#include "MenuScene.h"
+#include "PlayScene.h"
+#include "EndScene.h"
 #include "../Framework/InputMgr.h"
 
 bool SceneMgr::Init()
 {
-	sceneMap[Scenes::Dev1] = new SceneDev1();
-	sceneMap[Scenes::Dev2] = new SceneDev2();
+	sceneMap[Scenes::Start] = new StartScene();
+	sceneMap[Scenes::Menu] = new MenuScene();
+	sceneMap[Scenes::Stage1] = new PlayScene(Scenes::Stage1);
+	sceneMap[Scenes::Stage2] = new PlayScene(Scenes::Stage2);
+	sceneMap[Scenes::Stage3] = new PlayScene(Scenes::Stage3);
+	sceneMap[Scenes::End] = new EndScene();
 
-	currScene = Scenes::Dev1;
+	currScene = Scenes::Start;
 	sceneMap[currScene]->Init();
 	sceneMap[currScene]->Enter();
 
@@ -36,8 +42,6 @@ void SceneMgr::ChangeScene(Scenes scene)
 void SceneMgr::Update(float dt)
 {
 	sceneMap[currScene]->Update(dt);
-	if (InputMgr::GetKeyDown(Keyboard::Return))
-		ChangeScene((Scenes)(1 - (int)currScene));
 }
 
 void SceneMgr::Draw(RenderWindow& window)

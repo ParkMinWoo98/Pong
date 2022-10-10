@@ -1,6 +1,7 @@
 #include "Ball.h"
 #include "../Framework/InputMgr.h"
 #include "../Framework/ResourceMgr.h"
+#include "../Framework/SoundMgr.h"
 #include <cmath>
 #include "Bat.h"
 
@@ -245,6 +246,7 @@ void Ball::OnCollisionBlock(const FloatRect& rect)
 	if (isEffectOn && effect == Effects::Breaker)
 		return;
 	OnCollision(rect);
+	SOUND_MGR->Play("sound/attack.wav");
 }
 
 void Ball::OnCollisionScreen(const Vector2i& windowSize)

@@ -7,8 +7,12 @@ using namespace sf;
 
 enum class Scenes
 {
-	Dev1,
-	Dev2,
+	Start,
+	Menu,
+	Stage1,
+	Stage2,
+	Stage3,
+	End,
 };
 
 class Scene

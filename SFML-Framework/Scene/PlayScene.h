@@ -7,7 +7,7 @@
 #include "../GameObject/Bat.h"
 #include "../GameObject/TextObject.h"
 
-class SceneDev1 : public Scene
+class PlayScene : public Scene
 {
 protected:
 	Ball* ball;
@@ -22,8 +22,8 @@ protected:
 	TextObject* ballLife;
 
 public:
-	SceneDev1();
-	virtual ~SceneDev1();
+	PlayScene(Scenes stage);
+	virtual ~PlayScene();
 
 	virtual void Enter() override;
 	virtual void Exit() override;

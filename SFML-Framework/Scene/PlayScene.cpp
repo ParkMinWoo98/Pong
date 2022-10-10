@@ -1,4 +1,4 @@
-#include "SceneDev1.h"
+#include "PlayScene.h"
 #include "SceneMgr.h"
 #include "../Framework/Framework.h"
 #include "../Framework/InputMgr.h"
@@ -6,8 +6,8 @@
 #include "../GameObject/SpriteObj.h"
 #include "../Framework/SoundMgr.h"
 
-SceneDev1::SceneDev1()
-	:Scene(Scenes::Dev1)
+PlayScene::PlayScene(Scenes stage)
+	:Scene(stage)
 {
 	SpriteObj* background = new SpriteObj();
 	background->SetTexture(*RESOURCE_MGR->GetTexture("graphics/map.png"));
@@ -34,31 +34,40 @@ SceneDev1::SceneDev1()
 		objList.push_back(block);
 	}
 	expPool = new ExplosionPool();
+	
+	TextObject* stageText = new TextObject();
+	stageText->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	stageText->SetString("Stage " + to_string((int)stage - 1));
+	stageText->SetPos({ 20, 20 });
+	UiObjList.push_back(stageText);
+
 	ballLife = new TextObject();
 	ballLife->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
-	ballLife->SetPos({ 0, 0 });
-	UiObjList.push_back(ballLife);
+	ballLife->SetPos(Vector2f(FRAMEWORK->GetWindowSize().x - 20, 20));
+	ballLife->SetOrigin(Origins::TR);
+	UiObjList.push_back(ballLife);	
 }
 
-SceneDev1::~SceneDev1()
+PlayScene::~PlayScene()
 {
 	if (itemPool != nullptr)
 		delete itemPool;
 	itemPool = nullptr;
 }
 
-void SceneDev1::Enter()
+void PlayScene::Enter()
 {
 	SOUND_MGR->Play("sound/normal_bgm.wav", true);
 }
 
-void SceneDev1::Exit()
+void PlayScene::Exit()
 {
 	SOUND_MGR->StopAll();
 }
 
-void SceneDev1::Init()
+void PlayScene::Init()
 {
+	SOUND_MGR->Play("sound/normal_bgm.wav", true);
 	Release();
 	Scene::Init();
 	itemPool->Init();
@@ -75,7 +84,7 @@ void SceneDev1::Init()
 	}
 }
 
-void SceneDev1::Release()
+void PlayScene::Release()
 {
 	for (auto item : items)
 	{
@@ -88,9 +97,10 @@ void SceneDev1::Release()
 	}
 	exps.clear();
 	Scene::Release();
+	SOUND_MGR->StopAll();
 }
 
-void SceneDev1::Update(float dt)
+void PlayScene::Update(float dt)
 {
 	Scene::Update(dt);
 	for (auto it = exps.begin(); it != exps.end();)
@@ -106,9 +116,9 @@ void SceneDev1::Update(float dt)
 	}
 	ball->OnCollisionScreen(FRAMEWORK->GetWindowSize());
 	ballLife->SetString("Life = " + to_string(ball->GetLife()));
-	ballLife->SetOrigin(Origins::TL);
+	ballLife->SetOrigin(Origins::TR);
 	if (ball->GetLife() <= 0)
-		exit(1);
+		Init();
 	if (ball->CollideWith(bat->GetRect()))
 		ball->OnCollision(bat->GetRect());
 	for (auto block : blocks)
@@ -133,7 +143,10 @@ void SceneDev1::Update(float dt)
 	while (1)
 	{
 		if (it == blocks.end())
-			exit(1);
+		{
+			SCENE_MGR->ChangeScene(Scenes((int)type + 1));
+			break;
+		}
 		if ((*it)->GetActive())
 			break;
 		++it;
@@ -164,6 +177,7 @@ void SceneDev1::Update(float dt)
 						exp->SetPos((*it)->GetPos());
 						exp->Explode();
 						exps.push_back(exp);
+						SOUND_MGR->Play("sound/explosion.wav");
 					}
 					break;
 				default:
@@ -180,7 +194,7 @@ void SceneDev1::Update(float dt)
 	}
 }
 
-void SceneDev1::Draw(RenderWindow& window)
+void PlayScene::Draw(RenderWindow& window)
 {
 	Scene::Draw(window);
 	for (auto exp : exps)

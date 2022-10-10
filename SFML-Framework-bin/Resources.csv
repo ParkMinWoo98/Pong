@@ -1,7 +1,7 @@
 id,"type(0: Texture, 1: Font, 2: Sound "
 fonts/NotoSansKR-Bold.otf,1
 sound/normal_bgm.wav,2
-sound/select.wav,2
+sound/attack.wav,2
 graphics/map.png,0
 graphics/ninja/1.png,0
 graphics/ninja/2.png,0
@@ -79,3 +79,4 @@ graphics/block2/11.png,0
 graphics/block2/12.png,0
 graphics/block2/13.png,0
 graphics/block2/14.png,0
+sound/explosion.wav,2

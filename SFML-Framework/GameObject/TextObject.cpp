@@ -24,6 +24,11 @@ void TextObject::Draw(RenderWindow& window)
 	window.draw(text);
 }
 
+void TextObject::SetSize(const Vector2f& size)
+{
+	text.setScale(size);
+}
+
 void TextObject::SetOrigin(Origins origin)
 {
 	Utils::SetOrigin(text, origin);

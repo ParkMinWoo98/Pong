@@ -68,3 +68,8 @@ bool Framework::Do()
     }
     return true;
 }
+
+void Framework::Done()
+{
+    window.close();
+}

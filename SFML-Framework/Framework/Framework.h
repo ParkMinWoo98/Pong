@@ -26,6 +26,8 @@ public:
 
 	bool Init();
 	bool Do();
+
+	void Done();
 };
 
 #define FRAMEWORK (Framework::GetInstance())

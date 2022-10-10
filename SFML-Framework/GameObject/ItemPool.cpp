@@ -55,9 +55,9 @@ ItemPool::~ItemPool()
 
 Item* ItemPool::GetItem() const
 {
-    // 아이템 없을 확률 66.67퍼
+    // 아이템 잘 나오게 조정
     ItemType type = ItemType::None;
-    int itemOn = Utils::Range(0, (int)ItemType::Count * 3);
+    int itemOn = Utils::Range(0, (int)ItemType::Count);
     if (itemOn / (int)ItemType::Count == 0)
         type = (ItemType)itemOn;
 
