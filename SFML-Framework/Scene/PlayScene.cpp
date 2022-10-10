@@ -5,6 +5,7 @@
 #include "../Framework/ResourceMgr.h"
 #include "../GameObject/SpriteObj.h"
 #include "../Framework/SoundMgr.h"
+#include <fstream>
 
 PlayScene::PlayScene(Scenes stage)
 	:Scene(stage)
@@ -19,22 +20,61 @@ PlayScene::PlayScene(Scenes stage)
 	objList.push_back(ball);
 	ball->SetBat(bat);
 	itemPool = new ItemPool();
-	for (int i = 0; i < 2; ++i)
+	string blockFileName = "tables/stage" + to_string((int)type - 1) + ".txt";
+	ifstream ifs(blockFileName);
+	vector<string> blockLocation;
+	string str;
+	while (getline(ifs, str))
 	{
-		Block* block = new Block(BlockType::Normal);
-		block->SetPos(Vector2f(100 + 150.f * i, 300.f));
-		blocks.push_back(block);
-		objList.push_back(block);
+		blockLocation.push_back(str);
 	}
-	for (int i = 0; i < 2; ++i)
+	ifs.close();
+	Vector2f curLocation = { 40.f, 40.f };
+	for (const auto& string : blockLocation)
 	{
-		Block* block = new Block(BlockType::Elite);
-		block->SetPos(Vector2f(400 + 150.f * i, 300.f));
-		blocks.push_back(block);
-		objList.push_back(block);
+		for (auto it = string.begin(); it != string.end(); ++it)
+		{
+			int count;
+			switch (*it)
+			{
+			case 'N':
+				count = *(++it) - 48;
+				for (int i = 0; i < count; ++i)
+				{
+					Block* block = new Block(BlockType::Normal);
+					block->SetPos(curLocation);
+					blocks.push_back(block);
+					objList.push_back(block);
+					curLocation.x += 100.f;
+				}
+				break;
+			case 'E':
+				count = *(++it) - 48;
+				for (int i = 0; i < count; ++i)
+				{
+					Block* block = new Block(BlockType::Elite);
+					block->SetPos(curLocation);
+					blocks.push_back(block);
+					objList.push_back(block);
+					curLocation.x += 100.f;
+				}
+				break;
+			case 'S':
+				count = *(++it) - 48;
+				for (int i = 0; i < count; ++i)
+				{
+					curLocation.x += 100.f;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		curLocation.x = 40.f;
+		curLocation.y += 100.f;
 	}
 	expPool = new ExplosionPool();
-	
+
 	TextObject* stageText = new TextObject();
 	stageText->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	stageText->SetString("Stage " + to_string((int)stage - 1));
@@ -45,7 +85,7 @@ PlayScene::PlayScene(Scenes stage)
 	ballLife->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
 	ballLife->SetPos(Vector2f(FRAMEWORK->GetWindowSize().x - 20, 20));
 	ballLife->SetOrigin(Origins::TR);
-	UiObjList.push_back(ballLife);	
+	UiObjList.push_back(ballLife);
 }
 
 PlayScene::~PlayScene()

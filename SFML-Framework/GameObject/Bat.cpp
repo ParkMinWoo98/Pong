@@ -28,6 +28,8 @@ void Bat::FlipX()
 
 void Bat::EffectOn()
 {
+	if (isEffectOn)
+		EffectOff();
 	isEffectOn = true;
 	effectTimer = effectTimerSet;
 	anim->SetSize(Vector2f(2.f, 2.f));
@@ -57,6 +59,10 @@ FloatRect Bat::GetRect() const
 void Bat::Init()
 {
 	Object::Init();
+	if (isEffectOn)
+	{
+		EffectOff();
+	}
 	position = Vector2f(640 * 0.5f, 1000.f);
 	anim->Init();
 	FlipX();
