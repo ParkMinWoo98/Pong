@@ -15,6 +15,8 @@ class Bat;
 class Ball : public Object
 {
 protected:
+	Sprite* sprite;
+
 	FloatRect ballRect;
 	Vector2f ballCenter;
 

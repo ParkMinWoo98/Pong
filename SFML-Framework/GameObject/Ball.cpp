@@ -10,6 +10,9 @@ Ball::Ball()
 	:speed(500), angle(0), isMoving(false), curAnim(nullptr), absRotation(0.01f)
 	, isEffectOn(false), effectTimer(0.f), effectTimerSet(5.f), effect(Effects::None), bat(nullptr)
 {
+	sprite = new Sprite();
+	sprite->setTexture(*RESOURCE_MGR->GetTexture("graphics/ninja/waiting.png"));
+	Utils::SetOrigin(*sprite, Origins::BC);
 	vector<vector<string>> ballnames;
 	ballnames.push_back({ "graphics/ninja/1.png", "graphics/ninja/2.png", "graphics/ninja/3.png", "graphics/ninja/4.png", "graphics/ninja/5.png", "graphics/ninja/6.png" });
 	ballnames.push_back({"graphics/ninja/dash1.png", "graphics/ninja/dash2.png", "graphics/ninja/dash3.png", "graphics/ninja/dash4.png", "graphics/ninja/dash5.png", "graphics/ninja/dash6.png" });
@@ -47,6 +50,8 @@ void Ball::Init()
 	effectTimer = 0.f;
 	absRotation = 0.01f;
 	SetPos(bat->GetTopPos());
+	curAnim->SetColor({ 255, 255, 255, 153 });
+	sprite->setPosition(position);
 	curAnim->SetPos(position);
 	curAnim->SetRotation(rotation);
 	FlipX();
@@ -65,8 +70,9 @@ void Ball::Update(float dt)
 	{
 		ChangeDir(dt);
 		SetPos(bat->GetTopPos());
-		curAnim->SetPos(position);
 		curAnim->SetRotation(rotation);
+		curAnim->SetPos(position + currDir * 50.f);
+		sprite->setPosition(position);
 		if (InputMgr::GetKeyDown(Keyboard::Space))
 			Fire();
 		return;
@@ -84,6 +90,8 @@ void Ball::Update(float dt)
 
 void Ball::Draw(RenderWindow& window)
 {
+	if (!isMoving)
+		window.draw(*sprite);
 	curAnim->Draw(window);
 }
 
@@ -166,6 +174,8 @@ void Ball::ChangeDir(float dt)
 		rotation = rotation >= 0.f ? absRotation : -absRotation;
 	else
 		rotation = InputMgr::GetAxisRaw(Axis::Horizontal) > 0.f ? absRotation : -absRotation;
+	float scaleX = rotation  > 0 ? abs(sprite->getScale().x) : -abs(sprite->getScale().x);
+	sprite->setScale(scaleX, abs(sprite->getScale().y));
 	angle = rotation / 360 * 2 * PI;
 	currDir = Vector2f(sin(angle), -cos(angle));
 	FlipX();
@@ -174,6 +184,7 @@ void Ball::ChangeDir(float dt)
 void Ball::Fire()
 {
 	isMoving = true;
+	curAnim->SetColor({ 255, 255, 255, 255 });
 }
 
 bool Ball::CollideWith(const FloatRect& rect)
@@ -184,6 +195,8 @@ bool Ball::CollideWith(const FloatRect& rect)
 
 void Ball::OnCollision(const FloatRect& rect)
 {
+	if (!isMoving)
+		return;
 	ballCenter.x = ballRect.left + ballRect.width * 0.5f;
 	ballCenter.y = ballRect.top + ballRect.height * 0.5f;
 
@@ -220,6 +233,8 @@ void Ball::OnCollisionBlock(const FloatRect& rect)
 
 void Ball::OnCollisionScreen(const Vector2i& windowSize)
 {
+	if (!isMoving)
+		return;
 	ballRect = curAnim->GetRect();
 	if (ballRect.top < 0.f)
 	{
