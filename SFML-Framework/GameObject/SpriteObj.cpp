@@ -10,6 +10,12 @@ SpriteObj::~SpriteObj()
 
 void SpriteObj::Init()
 {
+	Object::Init();
+}
+
+void SpriteObj::Release()
+{
+	Object::Release();
 }
 
 void SpriteObj::Update(float dt)
@@ -40,7 +46,17 @@ void SpriteObj::SetRotation(float rotate)
 	sprite.setRotation(rotation);
 }
 
-void SpriteObj::SetTexture(Texture& tex)
+void SpriteObj::SetColor(Color color)
+{
+	sprite.setColor(color);
+}
+
+FloatRect SpriteObj::GetRect() const
+{
+	return sprite.getGlobalBounds();
+}
+
+void SpriteObj::SetTexture(const Texture& tex)
 {
 	sprite.setTexture(tex);
 }

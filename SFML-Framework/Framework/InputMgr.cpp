@@ -21,12 +21,13 @@ void InputMgr::Init()
     axisInfoMap.insert({ info.axis, info });
 
     // Vertical
-    info.axis = Axis::Vertical;
-    info.positives.push_back(Keyboard::Key::S);
-    info.positives.push_back(Keyboard::Key::Down);
-    info.negatives.push_back(Keyboard::Key::W);
-    info.negatives.push_back(Keyboard::Key::Up);
-    axisInfoMap.insert({ info.axis, info });
+    AxisInfo info2;
+    info2.axis = Axis::Vertical;
+    info2.positives.push_back(Keyboard::Key::S);
+    info2.positives.push_back(Keyboard::Key::Down);
+    info2.negatives.push_back(Keyboard::Key::W);
+    info2.negatives.push_back(Keyboard::Key::Up);
+    axisInfoMap.insert({ info2.axis, info2 });
 }
 
 void InputMgr::ClearInput()

@@ -1,8 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "../3rd/SingleTon.h"
 
 using namespace sf;
-class Framework
+class Framework : public Singleton<Framework>
 {
 protected:
 	RenderWindow window;
@@ -14,13 +15,19 @@ protected:
 	float timeScale;
 
 public:
-	Framework(int width, int height);
+	Framework();
 	virtual ~Framework();
+
+	void SetWindowSize(int width, int height);
+	const Vector2i& GetWindowSize() const;
 
 	float GetDT() const;
 	float GetRealDT() const;
 
 	bool Init();
 	bool Do();
+
+	void Done();
 };
 
+#define FRAMEWORK (Framework::GetInstance())

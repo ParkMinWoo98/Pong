@@ -22,10 +22,13 @@ bool Object::GetActive() const
 
 void Object::Init()
 {
+	enabled = true;
+	rotation = 0.f;
 }
 
 void Object::Release()
 {
+	enabled = false;
 }
 
 void Object::Update(float dt)

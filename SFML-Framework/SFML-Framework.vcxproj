@@ -146,6 +146,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Scene\EndScene.cpp" />
+    <ClCompile Include="GameObject\Bat.cpp" />
+    <ClCompile Include="GameObject\ExplosionPool.cpp" />
+    <ClCompile Include="GameObject\Explosion.cpp" />
+    <ClCompile Include="GameObject\Block.cpp" />
+    <ClCompile Include="GameObject\Animation.cpp" />
+    <ClCompile Include="GameObject\Ball.cpp" />
     <ClCompile Include="DataTable\DataTable.cpp" />
     <ClCompile Include="DataTable\DataTableMGR.cpp" />
     <ClCompile Include="DataTable\StringTable.cpp" />
@@ -153,19 +160,29 @@
     <ClCompile Include="Framework\InputMgr.cpp" />
     <ClCompile Include="Framework\ResourceMgr.cpp" />
     <ClCompile Include="Framework\Utils.cpp" />
+    <ClCompile Include="GameObject\Item.cpp" />
+    <ClCompile Include="GameObject\ItemPool.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
+    <ClCompile Include="Scene\MenuScene.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
-    <ClCompile Include="Scene\SceneDev1.cpp" />
-    <ClCompile Include="Scene\SceneDev2.cpp" />
+    <ClCompile Include="Scene\PlayScene.cpp" />
     <ClCompile Include="Scene\SceneMgr.cpp" />
     <ClCompile Include="GameObject\SpriteObj.cpp" />
     <ClCompile Include="GameObject\TextObject.cpp" />
     <ClCompile Include="Framework\SoundMgr.cpp" />
+    <ClCompile Include="Scene\StartScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd\rapidcsv.h" />
     <ClInclude Include="3rd\SingleTon.h" />
+    <ClInclude Include="Scene\EndScene.h" />
+    <ClInclude Include="GameObject\Bat.h" />
+    <ClInclude Include="GameObject\ExplosionPool.h" />
+    <ClInclude Include="GameObject\Explosion.h" />
+    <ClInclude Include="GameObject\Block.h" />
+    <ClInclude Include="GameObject\Animation.h" />
+    <ClInclude Include="GameObject\Ball.h" />
     <ClInclude Include="DataTable\DataTable.h" />
     <ClInclude Include="DataTable\DataTableMGR.h" />
     <ClInclude Include="DataTable\StringTable.h" />
@@ -174,13 +191,16 @@
     <ClInclude Include="Framework\ResourceMgr.h" />
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="GameObject\Object.h" />
+    <ClInclude Include="GameObject\Item.h" />
+    <ClInclude Include="GameObject\ItemPool.h" />
+    <ClInclude Include="Scene\MenuScene.h" />
     <ClInclude Include="Scene\Scene.h" />
-    <ClInclude Include="Scene\SceneDev1.h" />
-    <ClInclude Include="Scene\SceneDev2.h" />
+    <ClInclude Include="Scene\PlayScene.h" />
     <ClInclude Include="Scene\SceneMgr.h" />
     <ClInclude Include="GameObject\SpriteObj.h" />
     <ClInclude Include="GameObject\TextObject.h" />
     <ClInclude Include="Framework\SoundMgr.h" />
+    <ClInclude Include="Scene\StartScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
