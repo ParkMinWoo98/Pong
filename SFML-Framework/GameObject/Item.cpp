@@ -3,7 +3,6 @@
 Item::Item(ItemType type)
     :type(type)
 {
-    SetOrigin(Origins::MC);
 }
 
 Item::~Item()

@@ -13,21 +13,22 @@ ItemPool::ItemPool()
             switch ((ItemType)i)
             {
             case ItemType::BallSizeUp:
-                item->SetTexture(*RESOURCE_MGR->GetTexture("graphics/redball2.png"));
+                item->SetTexture(*RESOURCE_MGR->GetTexture("graphics/items/meat.png"));
                 break;
             case ItemType::BallSpeedUp:
-                item->SetTexture(*RESOURCE_MGR->GetTexture("graphics/redball2.png"));
+                item->SetTexture(*RESOURCE_MGR->GetTexture("graphics/items/speed_up.png"));
                 break;
             case ItemType::Breaker:
-                item->SetTexture(*RESOURCE_MGR->GetTexture("graphics/redball2.png"));
+                item->SetTexture(*RESOURCE_MGR->GetTexture("graphics/items/sword.png"));
                 break;
             case ItemType::BatLengthUp:
-                item->SetTexture(*RESOURCE_MGR->GetTexture("graphics/redball2.png"));
+                item->SetTexture(*RESOURCE_MGR->GetTexture("graphics/items/bat_potion.png"));
                 break;
             case ItemType::Explode:
-                item->SetTexture(*RESOURCE_MGR->GetTexture("graphics/redball2.png"));
+                item->SetTexture(*RESOURCE_MGR->GetTexture("graphics/items/bomb.png"));
                 break;
-            }            
+            }           
+            item->SetOrigin(Origins::MC);
             items->push_back(item);
         }
         unUsingItems.push_back(items);

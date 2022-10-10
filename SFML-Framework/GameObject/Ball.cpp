@@ -2,12 +2,13 @@
 #include "../Framework/InputMgr.h"
 #include "../Framework/ResourceMgr.h"
 #include <cmath>
+#include "Bat.h"
 
 constexpr auto PI = 3.141592;
 
 Ball::Ball()
-	:speed(500), angle(0), isMoving(false), curAnim(nullptr),
-	isEffectOn(false), effectTimer(0.f), effectTimerSet(5.f), effect(Effects::None)
+	:speed(500), angle(0), isMoving(false), curAnim(nullptr), absRotation(0.01f)
+	, isEffectOn(false), effectTimer(0.f), effectTimerSet(5.f), effect(Effects::None), bat(nullptr)
 {
 	vector<vector<string>> ballnames;
 	ballnames.push_back({ "graphics/ninja/1.png", "graphics/ninja/2.png", "graphics/ninja/3.png", "graphics/ninja/4.png", "graphics/ninja/5.png", "graphics/ninja/6.png" });
@@ -41,13 +42,19 @@ void Ball::Init()
 	Object::Init();
 	curAnim->Init();
 	isMoving = false;
-	FlipX();
 	if (isEffectOn)
 		EffectOff();
 	effectTimer = 0.f;
-	position = Vector2f(640 * 0.5f, 1000 * 0.95f);
+	absRotation = 0.01f;
+	SetPos(bat->GetTopPos());
 	curAnim->SetPos(position);
 	curAnim->SetRotation(rotation);
+	FlipX();
+}
+
+void Ball::Release()
+{
+	Object::Release();
 }
 
 void Ball::Update(float dt)
@@ -57,6 +64,8 @@ void Ball::Update(float dt)
 	if (!isMoving)
 	{
 		ChangeDir(dt);
+		SetPos(bat->GetTopPos());
+		curAnim->SetPos(position);
 		curAnim->SetRotation(rotation);
 		if (InputMgr::GetKeyDown(Keyboard::Space))
 			Fire();
@@ -95,6 +104,11 @@ void Ball::SetRotation()
 void Ball::FlipX()
 {
 	curAnim->FlipX(currDir.x >= 0.f);
+}
+
+void Ball::SetBat(Bat* bat)
+{
+	this->bat = bat;
 }
 
 void Ball::EffectOn(Effects effect)
@@ -143,15 +157,15 @@ void Ball::EffectOff()
 
 void Ball::ChangeDir(float dt)
 {
-	if (InputMgr::GetKey(Keyboard::Key::A) && rotation > -90)
-		rotation -= 100 * dt;
-	if (InputMgr::GetKey(Keyboard::Key::D) && rotation < 90)
-		rotation += 100 * dt;
-
-	if (rotation > 90)
-		rotation = 90;
-	if (rotation < -90)
-		rotation = -90;
+	absRotation += InputMgr::GetAxisRaw(Axis::Vertical) * 100 * dt;
+	if (absRotation <= 0.f)
+		absRotation = 0.01f;
+	if (absRotation > 90)
+		absRotation = 90;
+	if (InputMgr::GetAxisRaw(Axis::Horizontal) == 0.f)
+		rotation = rotation >= 0.f ? absRotation : -absRotation;
+	else
+		rotation = InputMgr::GetAxisRaw(Axis::Horizontal) > 0.f ? absRotation : -absRotation;
 	angle = rotation / 360 * 2 * PI;
 	currDir = Vector2f(sin(angle), -cos(angle));
 	FlipX();
@@ -172,8 +186,6 @@ void Ball::OnCollision(const FloatRect& rect)
 {
 	ballCenter.x = ballRect.left + ballRect.width * 0.5f;
 	ballCenter.y = ballRect.top + ballRect.height * 0.5f;
-	if (isEffectOn && effect == Effects::Breaker)
-		return;
 
 	if (ballCenter.x < rect.left && currDir.x > 0)
 	{
@@ -197,6 +209,13 @@ void Ball::OnCollision(const FloatRect& rect)
 	}
 	FlipX();
 	curAnim->SetPos(position);
+}
+
+void Ball::OnCollisionBlock(const FloatRect& rect)
+{
+	if (isEffectOn && effect == Effects::Breaker)
+		return;
+	OnCollision(rect);
 }
 
 void Ball::OnCollisionScreen(const Vector2i& windowSize)

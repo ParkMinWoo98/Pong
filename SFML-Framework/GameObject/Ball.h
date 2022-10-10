@@ -1,6 +1,5 @@
 #pragma once
 #include "Object.h"
-#include <SFML/Graphics.hpp>
 #include "Animation.h"
 
 enum class Effects
@@ -11,6 +10,8 @@ enum class Effects
 	Breaker,
 };
 
+class Bat;
+
 class Ball : public Object
 {
 protected:
@@ -18,30 +19,35 @@ protected:
 	Vector2f ballCenter;
 
 	float speed;
+	float absRotation;
 	float angle;
 	Vector2f currDir;
 	bool isMoving;
 
+	bool isEffectOn;
 	float effectTimer;
 	float effectTimerSet;
-	bool isEffectOn;
 	Effects effect;
 
 	Animation* curAnim;
 	vector<Animation*> anims;
+
+	Bat* bat;
 
 public:
 	Ball();
 	virtual ~Ball();
 
 	virtual void Init() override;
-	virtual void Release() override {}
+	virtual void Release() override;
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
 	void SetSpeed(float speed);
 	void SetRotation();
 	void FlipX();
+
+	void SetBat(Bat* bat);
 
 	void EffectOn(Effects effect);
 	void EffectOff();
@@ -50,5 +56,6 @@ public:
 	void Fire();
 	bool CollideWith(const FloatRect& rect);
 	void OnCollision(const FloatRect& rect);
+	void OnCollisionBlock(const FloatRect& rect);
 	void OnCollisionScreen(const Vector2i& windowSize);
 };

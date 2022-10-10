@@ -6,8 +6,10 @@ Block::Block()
 	:isAlive(true), item(nullptr), curAnim(nullptr)
 {
 	vector<vector<string>> blocknames;
-	blocknames.push_back({ "graphics/coke/coke1.png", "graphics/coke/coke2.png", "graphics/coke/coke3.png", "graphics/coke/coke4.png" });
-	blocknames.push_back({ "graphics/coke/coke1.png", "graphics/coke/coke2.png", "graphics/coke/coke3.png", "graphics/coke/coke4.png" });
+	blocknames.push_back({ "graphics/block1/8.png", "graphics/block1/9.png", "graphics/block1/10.png", "graphics/block1/11.png", "graphics/block1/12.png"
+		, "graphics/block1/13.png" , "graphics/block1/14.png" , "graphics/block1/15.png" , "graphics/block1/16.png" });
+	blocknames.push_back({ "graphics/block1/1.png", "graphics/block1/2.png", "graphics/block1/3.png", "graphics/block1/4.png", "graphics/block1/5.png"
+		, "graphics/block1/5.png", "graphics/block1/6.png", "graphics/block1/7.png" });
 	for (const auto& blockname : blocknames)
 	{
 		Animation* anim = new Animation();

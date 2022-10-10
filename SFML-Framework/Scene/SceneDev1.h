@@ -4,11 +4,13 @@
 #include "../GameObject/Block.h"
 #include "../GameObject/ItemPool.h"
 #include "../GameObject/ExplosionPool.h"
+#include "../GameObject/Bat.h"
 
 class SceneDev1 : public Scene
 {
 protected:
 	Ball* ball;
+	Bat* bat;
 	list<Block*> blocks;
 	list<Item*> items;
 	list<Explosion*> exps;

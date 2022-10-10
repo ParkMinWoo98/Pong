@@ -14,12 +14,12 @@ SceneDev1::SceneDev1()
 	background->SetTexture(*RESOURCE_MGR->GetTexture("graphics/seamless_space.png"));
 	background->SetColor({ 255, 255, 255, 150 });
 	objList.push_back(background);
-
+	bat = new Bat();
+	objList.push_back(bat);
 	ball = new Ball();
 	objList.push_back(ball);
-
+	ball->SetBat(bat);
 	itemPool = new ItemPool();
-
 	for (int i = 0; i < 4; ++i)
 	{
 		Block* block = new Block();
@@ -27,7 +27,6 @@ SceneDev1::SceneDev1()
 		blocks.push_back(block);
 		objList.push_back(block);
 	}
-
 	expPool = new ExplosionPool();
 
 	TextObject* ui1 = new TextObject();
@@ -101,15 +100,16 @@ void SceneDev1::Update(float dt)
 		}
 		++it;
 	}
-
 	ball->OnCollisionScreen(FRAMEWORK->GetWindowSize());
+	if (ball->CollideWith(bat->GetRect()))
+		ball->OnCollision(bat->GetRect());
 	for (auto block : blocks)
 	{
 		if (block->GetAlive())
 		{
 			if (ball->CollideWith(block->GetRect()))
 			{
-				ball->OnCollision(block->GetRect());
+				ball->OnCollisionBlock(block->GetRect());
 				block->Die();
 			}
 			for (auto exp : exps)
@@ -139,6 +139,7 @@ void SceneDev1::Update(float dt)
 					ball->EffectOn(Effects::Breaker);
 					break;
 				case ItemType::BatLengthUp:
+					bat->EffectOn();
 					break;
 				case ItemType::Explode:
 					{
