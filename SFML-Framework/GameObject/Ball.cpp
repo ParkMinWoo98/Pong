@@ -7,7 +7,7 @@
 constexpr auto PI = 3.141592;
 
 Ball::Ball()
-	:speed(500), angle(0), isMoving(false), curAnim(nullptr), absRotation(0.01f)
+	:life(3), speed(500), angle(0), isMoving(false), curAnim(nullptr), absRotation(0.01f)
 	, isEffectOn(false), effectTimer(0.f), effectTimerSet(5.f), effect(Effects::None), bat(nullptr)
 {
 	sprite = new Sprite();
@@ -42,19 +42,9 @@ Ball::~Ball()
 
 void Ball::Init()
 {
+	life = 3;
 	Object::Init();
-	curAnim->Init();
-	isMoving = false;
-	if (isEffectOn)
-		EffectOff();
-	effectTimer = 0.f;
-	absRotation = 0.01f;
-	SetPos(bat->GetTopPos());
-	curAnim->SetColor({ 255, 255, 255, 153 });
-	sprite->setPosition(position);
-	curAnim->SetPos(position);
-	curAnim->SetRotation(rotation);
-	FlipX();
+	SetStart();
 }
 
 void Ball::Release()
@@ -95,6 +85,22 @@ void Ball::Draw(RenderWindow& window)
 	curAnim->Draw(window);
 }
 
+void Ball::SetStart()
+{
+	curAnim->Init();
+	isMoving = false;
+	if (isEffectOn)
+		EffectOff();
+	effectTimer = 0.f;
+	absRotation = 0.01f;
+	SetPos(bat->GetTopPos());
+	curAnim->SetColor({ 255, 255, 255, 128 });
+	sprite->setPosition(position);
+	curAnim->SetPos(position);
+	curAnim->SetRotation(rotation);
+	FlipX();
+}
+
 void Ball::SetSpeed(float speed)
 {
 	this->speed = speed;
@@ -117,6 +123,16 @@ void Ball::FlipX()
 void Ball::SetBat(Bat* bat)
 {
 	this->bat = bat;
+}
+
+void Ball::SetLife(int life)
+{
+	this->life = life;
+}
+
+int Ball::GetLife() const
+{
+	return life;
 }
 
 void Ball::EffectOn(Effects effect)
@@ -243,7 +259,8 @@ void Ball::OnCollisionScreen(const Vector2i& windowSize)
 	}
 	else if (ballRect.top + ballRect.height > windowSize.y)
 	{
-		Init();
+		--life;
+		SetStart();
 	}
 	if (ballRect.left < 0.f)
 	{

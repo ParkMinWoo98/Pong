@@ -5,6 +5,7 @@
 #include "../GameObject/ItemPool.h"
 #include "../GameObject/ExplosionPool.h"
 #include "../GameObject/Bat.h"
+#include "../GameObject/TextObject.h"
 
 class SceneDev1 : public Scene
 {
@@ -17,6 +18,9 @@ protected:
 
 	ItemPool* itemPool;
 	ExplosionPool* expPool;
+
+	TextObject* ballLife;
+
 public:
 	SceneDev1();
 	virtual ~SceneDev1();

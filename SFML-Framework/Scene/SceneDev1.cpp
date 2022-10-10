@@ -4,14 +4,13 @@
 #include "../Framework/InputMgr.h"
 #include "../Framework/ResourceMgr.h"
 #include "../GameObject/SpriteObj.h"
-#include "../GameObject/TextObject.h"
 #include "../Framework/SoundMgr.h"
 
 SceneDev1::SceneDev1()
 	:Scene(Scenes::Dev1)
 {
 	SpriteObj* background = new SpriteObj();
-	background->SetTexture(*RESOURCE_MGR->GetTexture("graphics/seamless_space.png"));
+	background->SetTexture(*RESOURCE_MGR->GetTexture("graphics/map.png"));
 	background->SetColor({ 255, 255, 255, 150 });
 	objList.push_back(background);
 	bat = new Bat();
@@ -20,20 +19,25 @@ SceneDev1::SceneDev1()
 	objList.push_back(ball);
 	ball->SetBat(bat);
 	itemPool = new ItemPool();
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 2; ++i)
 	{
-		Block* block = new Block();
+		Block* block = new Block(BlockType::Normal);
 		block->SetPos(Vector2f(100 + 150.f * i, 300.f));
 		blocks.push_back(block);
 		objList.push_back(block);
 	}
+	for (int i = 0; i < 2; ++i)
+	{
+		Block* block = new Block(BlockType::Elite);
+		block->SetPos(Vector2f(400 + 150.f * i, 300.f));
+		blocks.push_back(block);
+		objList.push_back(block);
+	}
 	expPool = new ExplosionPool();
-
-	TextObject* ui1 = new TextObject();
-	ui1->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
-	ui1->SetString("dev1");
-	ui1->SetPos({ 1200, 0 });
-	UiObjList.push_back(ui1);
+	ballLife = new TextObject();
+	ballLife->SetFont(*RESOURCE_MGR->GetFont("fonts/NotoSansKR-Bold.otf"));
+	ballLife->SetPos({ 0, 0 });
+	UiObjList.push_back(ballLife);
 }
 
 SceneDev1::~SceneDev1()
@@ -101,6 +105,10 @@ void SceneDev1::Update(float dt)
 		++it;
 	}
 	ball->OnCollisionScreen(FRAMEWORK->GetWindowSize());
+	ballLife->SetString("Life = " + to_string(ball->GetLife()));
+	ballLife->SetOrigin(Origins::TL);
+	if (ball->GetLife() <= 0)
+		exit(1);
 	if (ball->CollideWith(bat->GetRect()))
 		ball->OnCollision(bat->GetRect());
 	for (auto block : blocks)
@@ -110,7 +118,7 @@ void SceneDev1::Update(float dt)
 			if (ball->CollideWith(block->GetRect()))
 			{
 				ball->OnCollisionBlock(block->GetRect());
-				block->Die();
+				block->Hit();
 			}
 			for (auto exp : exps)
 			{
@@ -120,6 +128,15 @@ void SceneDev1::Update(float dt)
 				}
 			}
 		}
+	}
+	auto it = blocks.begin();
+	while (1)
+	{
+		if (it == blocks.end())
+			exit(1);
+		if ((*it)->GetActive())
+			break;
+		++it;
 	}
 	for (auto it = items.begin(); it != items.end();)
 	{

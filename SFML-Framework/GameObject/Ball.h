@@ -15,6 +15,8 @@ class Bat;
 class Ball : public Object
 {
 protected:
+	int life;
+
 	Sprite* sprite;
 
 	FloatRect ballRect;
@@ -45,11 +47,16 @@ public:
 	virtual void Update(float dt) override;
 	virtual void Draw(RenderWindow& window) override;
 
+	void SetStart();
+
 	void SetSpeed(float speed);
 	void SetRotation();
 	void FlipX();
 
 	void SetBat(Bat* bat);
+
+	void SetLife(int life);
+	int GetLife() const;
 
 	void EffectOn(Effects effect);
 	void EffectOff();

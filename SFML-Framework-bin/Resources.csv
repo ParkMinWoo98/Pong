@@ -2,7 +2,7 @@ id,"type(0: Texture, 1: Font, 2: Sound "
 fonts/NotoSansKR-Bold.otf,1
 sound/normal_bgm.wav,2
 sound/select.wav,2
-graphics/seamless_space.png,0
+graphics/map.png,0
 graphics/ninja/1.png,0
 graphics/ninja/2.png,0
 graphics/ninja/3.png,0
@@ -65,3 +65,17 @@ graphics/block1/14.png,0
 graphics/block1/15.png,0
 graphics/block1/16.png,0
 graphics/ninja/waiting.png,0
+graphics/block2/1.png,0
+graphics/block2/2.png,0
+graphics/block2/3.png,0
+graphics/block2/4.png,0
+graphics/block2/5.png,0
+graphics/block2/6.png,0
+graphics/block2/7.png,0
+graphics/block2/8.png,0
+graphics/block2/9.png,0
+graphics/block2/10.png,0
+graphics/block2/11.png,0
+graphics/block2/12.png,0
+graphics/block2/13.png,0
+graphics/block2/14.png,0
